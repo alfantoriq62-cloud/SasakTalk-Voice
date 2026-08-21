@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SasakTalk Voice Web - Penerjemah Bahasa Sasak</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ========== ROOT VARIABLES ========== */
+        :root {
+            --primary: #2d1b4e;
+            --primary-light: #4a2d7a;
+            --secondary: #f7d44a;
+            --secondary-light: #fae47a;
+            --dark: #1a1a2e;
+            --light: #f8f7fc;
+            --gradient-main: linear-gradient(145deg, #2d1b4e, #4a2d7a, #1a1a2e);
+            --gradient-accent: linear-gradient(135deg, #f7d44a, #f5b342);
+            --shadow: 0 20px 60px rgba(45, 27, 78, 0.25);
+            --radius: 24px;
+        }
+
+        /* ========== GLOBAL ========== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* ========== MAIN CONTAINER ========== */
+        .app-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ========== CARD UTAMA ========== */
+        .main-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s;
+        }
+
+        /* ========== HEADER ========== */
+        .app-header {
+            background: var(--gradient-main);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 3px solid var(--secondary);
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-logo-icon {
+            background: var(--secondary);
+            color: var(--primary);
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .app-title {
+            color: white;
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .app-title span {
+            color: var(--secondary);
+        }
+
+        .app-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .user-badge {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 30px;
+            padding: 6px 18px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        /* ========== BODY ========== */
+        .app-body {
+            padding: 30px;
+        }
+
+        /* ========== NAV TABS ========== */
+        .nav-tabs-custom {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 15px;
+        }
+
+        .nav-tab-btn {
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: none;
+            background: transparent;
+            color: #6c757d;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab-btn:hover {
+            background: #f0edf7;
+            color: var(--primary);
+        }
+
+        .nav-tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 25px rgba(45, 27, 78, 0.3);
+        }
+
+        .nav-tab-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* ========== TAB CONTENT ========== */
+        .tab-content {
+            display: none;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== FITUR 1: PENERJEMAH SUARA ========== */
+        .translator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .translator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .translator-panel {
+            background: #f8f7fc;
+            border-radius: 18px;
+            padding: 24px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .translator-panel:hover {
+            border-color: var(--primary-light);
+        }
+
+        .panel-label {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .panel-label .badge-flag {
+            background: var(--secondary);
+            color: var(--primary);
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+
+        .voice-input-area {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed #d4d0e0;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .voice-input-area.recording {
+            border-color: #dc3545;
+            background: #fff5f5;
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%,
+            100% {
+                border-color: #dc3545;
+            }
+            50% {
+                border-color: #ff6b6b;
+            }
+        }
+
+        .voice-btn-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient-accent);
+            color: var(--primary);
+            font-size: 30px;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(247, 212, 74, 0.4);
+        }
+
+        .voice-btn-circle:hover {
+            transform: scale(1.08);
+        }
+
+        .voice-btn-circle.recording {
+            background: #dc3545;
+            color: white;
+            animation: pulse-voice 1.5s infinite;
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.5);
+        }
+
+        @keyframes pulse-voice {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 20px rgba(220, 53, 69, 0);
+            }
+        }
+
+        .voice-status {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #6c757d;
+            min-height: 24px;
+        }
+
+        .voice-status.active {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .voice-text-result {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 12px;
+            min-height: 50px;
+            font-size: 1rem;
+            color: var(--dark);
+            border: 1px solid #e9ecef;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        .voice-text-result:empty::before {
+            content: 'Hasil suara akan muncul di sini...';
+            color: #adb5bd;
+            font-style: italic;
+        }
+
+        /* ========== DIALEKTIK ========== */
+        .dialect-selector {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #e9ecef;
+        }
+
+        .dialect-selector label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #6c757d;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .dialect-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dialect-option {
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 2px solid #e9ecef;
+            background: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #6c757d;
+        }
+
+        .dialect-option:hover {
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .dialect-option.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* ========== HASIL TERJEMAHAN ========== */
+        .translation-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            border-left: 5px solid var(--secondary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .translation-result .label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .translation-result .result-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 8px 0 0;
+            word-wrap: break-word;
+        }
+
+        .translation-result .result-text.placeholder {
+            color: #adb5bd;
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        .translation-source {
+            font-size: 0.7rem;
+            color: #adb5bd;
+            margin-top: 6px;
+        }
+
+        /* ========== FITUR 2: KAMUS ========== */
+        .dictionary-search {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .dictionary-search input {
+            flex: 1;
+            min-width: 200px;
+            padding: 14px 20px;
+            border-radius: 16px;
+            border: 2px solid #e9ecef;
+            font-size: 1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .dictionary-search input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(45, 27, 78, 0.1);
+        }
+
+        .dictionary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .dictionary-item {
+            background: #f8f7fc;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .dictionary-item:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .dict-word {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .dict-translation {
+            color: #2d4059;
+            font-weight: 600;
+        }
+
+        .dict-example {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* ========== FITUR 3: BUDAYA ========== */
+        .culture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .culture-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .culture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .culture-card .icon-box {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            background: linear-gradient(135deg, #f8f7fc, #e9ecef);
+        }
+
+        .culture-card .info {
+            padding: 16px;
+        }
+
+        .culture-card .info h6 {
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 0 4px;
+        }
+
+        .culture-card .info p {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin: 0;
+        }
+
+        /* ========== MODAL ========== */
+        .modal-custom {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-custom.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content-custom {
+            background: white;
+            border-radius: 28px;
+            padding: 40px 35px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #adb5bd;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #dc3545;
+        }
+
+        .modal-custom .form-control {
+            border-radius: 14px;
+            padding: 14px 18px;
+            border: 2px solid #e9ecef;
+            margin-bottom: 15px;
+        }
+
+        .modal-custom .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(45, 27, 78, 0.1);
+        }
+
+        .modal-custom .btn-primary {
+            background: var(--primary);
+            border: none;
+            border-radius: 50px;
+            padding: 12px;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .modal-custom .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .modal-toggle-link {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-toggle-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ========== AUTH STATE ========== */
+        .auth-state {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 576px) {
+            .app-header {
+                padding: 15px;
+            }
+            .app-body {
+                padding: 15px;
+            }
+            .app-title {
+                font-size: 1rem;
+            }
+            .app-logo-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 20px;
+            }
+            .nav-tab-btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+            }
+            .translator-panel {
+                padding: 16px;
+            }
+            .voice-btn-circle {
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
+            }
+            .modal-content-custom {
+                padding: 28px 20px;
+            }
+        }
+
+        /* Scrollbar */
+        .dictionary-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+        .dictionary-grid::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .dictionary-grid::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+
+        <!-- ============================================================ -->
+        <!-- MAIN CARD -->
+        <!-- ============================================================ -->
+        <div class="main-card">
+
+            <!-- ===== HEADER ===== -->
+            <header class="app-header">
+                <div class="app-logo">
+                    <div class="app-logo-icon">S</div>
+                    <div>
+                        <div class="app-title">Sasak<span>Talk</span></div>
+                        <div class="app-subtitle">Voice Web · Penerjemah Dua Arah</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="user-badge" id="userBadge">
+                        <i class="bi bi-person-circle"></i>
+                        <span id="userNameDisplay">Tamu</span>
+                    </div>
+                    <button class="btn-logout" id="authToggleBtn" onclick="toggleAuthModal()">
+                        <i class="bi bi-box-arrow-in-right"></i> <span id="authBtnText">Login</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ===== BODY ===== -->
+            <div class="app-body">
+
+                <!-- ===== NAV TABS ===== -->
+                <nav class="nav-tabs-custom">
+                    <button class="nav-tab-btn active" data-tab="tab-translator">
+                        <i class="bi bi-mic-fill"></i> Penerjemah
+                    </button>
+                    <button class="nav-tab-btn" data-tab="tab-dictionary">
+                        <i class="bi bi-book-fill"></i> Kamus
+                    </button>
+                    <button class="nav-tab-btn" data-tab="tab-culture">
+                        <i class="bi bi-buildings-fill"></i> Budaya
+                    </button>
+                </nav>
+
+                <!-- ========================================================== -->
+                <!-- TAB 1: PENERJEMAH SUARA -->
+                <!-- ========================================================== -->
+                <div id="tab-translator" class="tab-content active">
+
+                    <div class="translator-grid">
+
+                        <!-- Panel Kiri: Bahasa Sumber (Inggris / Asing) -->
+                        <div class="translator-panel">
+                            <div class="panel-label">
+                                <i class="bi bi-globe2"></i> Bahasa Sumber
+                                <span class="badge-flag" id="sourceLangLabel">🇬🇧 English</span>
+                            </div>
+
+                            <div class="voice-input-area" id="sourceVoiceArea">
+                                <button class="voice-btn-circle" id="sourceVoiceBtn" onclick="toggleSourceRecording()">
+                                    <i class="bi bi-mic-fill"></i>
+                                </button>
+                                <div class="voice-status" id="sourceVoiceStatus">Tekan mikrofon untuk mulai bicara</div>
+                                <div class="voice-text-result" id="sourceTextResult"></div>
+                            </div>
+
+                            <!-- Pilihan Bahasa Sumber -->
+                            <div class="mt-2">
+                                <select id="sourceLangSelect" class="form-select form-select-sm" style="border-radius:12px;border:2px solid #e9ecef;">
+                                    <option value="en">🇬🇧 English</option>
+                                    <option value="id">🇮🇩 Indonesia</option>
+                                    <option value="ar">🇸🇦 العربية</option>
+                                    <option value="zh">🇨🇳 中文</option>
+                                    <option value="ja">🇯🇵 日本語</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Panel Kanan: Bahasa Target (Sasak) -->
+                        <div class="translator-panel">
+                            <div class="panel-label">
+                                <i class="bi bi-translate"></i> Bahasa Target
+                                <span class="badge-flag">🌾 Sasak</span>
+                            </div>
+
+                            <div class="voice-input-area" id="targetVoiceArea">
+                                <button class="voice-btn-circle" id="targetVoiceBtn" onclick="playTargetAudio()">
+                                    <i class="bi bi-volume-up-fill"></i>
+                                </button>
+                                <div class="voice-status" id="targetVoiceStatus">Hasil terjemahan akan disuarakan</div>
+                                <div class="voice-text-result" id="targetTextResult"></div>
+                            </div>
+
+                            <!-- Pilihan Dialek Sasak -->
+                            <div class="dialect-selector">
+                                <label><i class="bi bi-diagram-3"></i> Pilih Dialek Sasak</label>
+                                <div class="dialect-options">
+                                    <span class="dialect-option active" data-dialect="ngeno-ngene">Ngeno-Ngene</span>
+                                    <span class="dialect-option" data-dialect="meno-mene">Meno-Mene</span>
+                                    <span class="dialect-option" data-dialect="ngeto-ngete">Ngeto-Ngete</span>
+                                    <span class="dialect-option" data-dialect="meriak-meriku">Meriak-Meriku</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Hasil Terjemahan -->
+                    <div class="translation-result" id="translationResult">
+                        <div class="label"><i class="bi bi-arrow-left-right"></i> Hasil Terjemahan</div>
+                        <p class="result-text placeholder" id="finalTranslation">Belum ada terjemahan...</p>
+                        <div class="translation-source" id="translationSource">Siap menerjemahkan</div>
+                    </div>
+
+                    <!-- Tombol Terjemahkan Manual -->
+                    <div class="mt-3 d-flex gap-2 flex-wrap">
+                        <button class="btn" style="background:var(--primary);color:white;border-radius:50px;padding:10px 30px;font-weight:600;" onclick="manualTranslate()">
+                            <i class="bi bi-arrow-right-circle-fill me-2"></i> Terjemahkan Sekarang
+                        </button>
+                        <button class="btn btn-outline-secondary" style="border-radius:50px;padding:10px 24px;" onclick="clearAll()">
+                            <i class="bi bi-x-circle me-1"></i> Bersihkan
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- TAB 2: KAMUS SASAK -->
+                <!-- ========================================================== -->
+                <div id="tab-dictionary" class="tab-content">
+
+                    <h5 class="fw-bold mb-3" style="color:var(--primary);">
+                        <i class="bi bi-book-fill me-2"></i>Kamus Digital Bahasa Sasak
+                    </h5>
+
+                    <div class="dictionary-search">
+                        <input type="text" id="dictSearchInput" placeholder="Cari kosakata..." oninput="filterDictionary()" />
+                        <button class="btn" style="background:var(--secondary);color:var(--primary);border-radius:50px;padding:10px 24px;font-weight:700;" onclick="filterDictionary()">
+                            <i class="bi bi-search"></i> Cari
+                        </button>
+                    </div>
+
+                    <div class="dictionary-grid" id="dictionaryGrid">
+                        <!-- Diisi oleh JavaScript -->
+                    </div>
+
+                    <div class="mt-3 text-muted small">
+                        <i class="bi bi-info-circle"></i> Total <span id="dictCount">0</span> kosakata
+                    </div>
+
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- TAB 3: BUDAYA SASAK -->
+                <!-- ========================================================== -->
+                <div id="tab-culture" class="tab-content">
+
+                    <h5 class="fw-bold mb-3" style="color:var(--primary);">
+                        <i class="bi bi-buildings-fill me-2"></i>Pengenalan Budaya Sasak
+                    </h5>
+
+                    <div class="culture-grid" id="cultureGrid">
+                        <!-- Diisi oleh JavaScript -->
+                    </div>
+
+                    <div class="mt-4 p-3 bg-light rounded-4" style="border:2px dashed #d4d0e0;">
+                        <p class="mb-0 text-muted" style="font-size:0.9rem;">
+                            <i class="bi bi-quote me-2"></i>
+                            "Budaya Sasak adalah warisan yang harus dijaga. Melalui teknologi digital, kita bisa memperkenalkan kekayaan budaya Lombok ke dunia."
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- end app-body -->
+
+        </div>
+        <!-- end main-card -->
+
+    </div>
+    <!-- end app-container -->
+
+
+    <!-- ============================================================ -->
+    <!-- MODAL AUTH (Login / Registrasi) -->
+    <!-- ============================================================ -->
+    <div class="modal-custom" id="authModal">
+        <div class="modal-content-custom">
+            <button class="modal-close" onclick="toggleAuthModal()">&times;</button>
+
+            <h5 class="fw-bold mb-3" style="color:var(--primary);" id="authModalTitle">
+                <i class="bi bi-box-arrow-in-right me-2"></i> Login
+            </h5>
+
+            <!-- Login Form -->
+            <div id="loginForm">
+                <input type="email" class="form-control" id="loginEmail" placeholder="Email" />
+                <input type="password" class="form-control" id="loginPassword" placeholder="Password" />
+                <button class="btn btn-primary" onclick="handleLogin()">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Masuk
+                </button>
+                <p class="text-center mt-3 small">
+                    Belum punya akun?
+                    <span class="modal-toggle-link" onclick="switchAuthForm('register')">Daftar di sini</span>
+                </p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" style="display:none;">
+                <input type="text" class="form-control" id="regName" placeholder="Nama Lengkap" />
+                <input type="email" class="form-control" id="regEmail" placeholder="Email" />
+                <input type="password" class="form-control" id="regPassword" placeholder="Password" />
+                <button class="btn btn-primary" onclick="handleRegister()">
+                    <i class="bi bi-person-plus me-2"></i> Daftar
+                </button>
+                <p class="text-center mt-3 small">
+                    Sudah punya akun?
+                    <span class="modal-toggle-link" onclick="switchAuthForm('login')">Login di sini</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
+    <script>
+        // ================================================================
+        // 1. DATA KAMUS SASAK
+        // ================================================================
+        const sasakDictionary = [
+            { word: 'Terima Kasih', translation: 'Matur Tampiasih', dialect: 'ngeno-ngene', example: 'Matur tampiasih atas bantuanane.' },
+            { word: 'Selamat Pagi', translation: 'Selamat Pagi', dialect: 'ngeno-ngene', example: 'Selamat pagi, apa kabar?' },
+            { word: 'Selamat Sore', translation: 'Selamat Petang', dialect: 'ngeno-ngene', example: 'Selamat petang, semoga sehat.' },
+            { word: 'Selamat Malam', translation: 'Selamat Malam', dialect: 'ngeno-ngene', example: 'Selamat malam, tidur yang nyenyak.' },
+            { word: 'Apa Kabar?', translation: 'Apa Kabar?', dialect: 'ngeno-ngene', example: 'Apa kabar? Semoga baik.' },
+            { word: 'Saya', translation: 'Aku', dialect: 'ngeno-ngene', example: 'Aku berasal dari Lombok.' },
+            { word: 'Kamu', translation: 'Kamu', dialect: 'ngeno-ngene', example: 'Kamu mau ke mana?' },
+            { word: 'Makan', translation: 'Makan', dialect: 'ngeno-ngene', example: 'Mari kita makan bersama.' },
+            { word: 'Minum', translation: 'Nginyem', dialect: 'ngeno-ngene', example: 'Ayo nginyem kopi.' },
+            { word: 'Rumah', translation: 'Umah', dialect: 'ngeno-ngene', example: 'Umah saya di desa Sembalun.' },
+            { word: 'Air', translation: 'Aiq', dialect: 'ngeno-ngene', example: 'Aiq di sini sangat jernih.' },
+            { word: 'Cantik', translation: 'Cantik', dialect: 'ngeno-ngene', example: 'Pemandangan di Lombok sangat cantik.' },
+            { word: 'Bagus', translation: 'Baik', dialect: 'ngeno-ngene', example: 'Kain tenun ini sangat baik.' },
+            { word: 'Pantai', translation: 'Pantai', dialect: 'ngeno-ngene', example: 'Pantai Kuta Lombok sangat indah.' },
+            { word: 'Gunung', translation: 'Gunung', dialect: 'ngeno-ngene', example: 'Gunung Rinjani adalah yang tertinggi.' },
+            { word: 'Maaf', translation: 'Ampura', dialect: 'ngeno-ngene', example: 'Ampura, saya terlambat.' },
+            { word: 'Tolong', translation: 'Tolong', dialect: 'ngeno-ngene', example: 'Tolong bantu saya.' },
+            { word: 'Ya', translation: 'Ya', dialect: 'ngeno-ngene', example: 'Ya, saya setuju.' },
+            { word: 'Tidak', translation: 'Nda', dialect: 'ngeno-ngene', example: 'Nda, saya tidak bisa.' },
+            { word: 'Hari', translation: 'Ari', dialect: 'ngeno-ngene', example: 'Hari ini cuaca cerah.' },
+            // Dialek Meno-Mene
+            { word: 'Terima Kasih', translation: 'Matur Tampiasih', dialect: 'meno-mene', example: 'Matur tampiasih banget.' },
+            { word: 'Saya', translation: 'Aku', dialect: 'meno-mene', example: 'Aku orang Lombok.' },
+            { word: 'Kamu', translation: 'Kamu', dialect: 'meno-mene', example: 'Kamu dari mana?' },
+            // Dialek Ngeto-Ngete
+            { word: 'Terima Kasih', translation: 'Matur Suksma', dialect: 'ngeto-ngete', example: 'Matur suksma atas bantuannya.' },
+            { word: 'Saya', translation: 'Kula', dialect: 'ngeto-ngete', example: 'Kula saking Lombok.' },
+            // Dialek Meriak-Meriku
+            { word: 'Terima Kasih', translation: 'Matur Nuhun', dialect: 'meriak-meriku', example: 'Matur nuhun, semoga berkah.' },
+            { word: 'Saya', translation: 'Uda', dialect: 'meriak-meriku', example: 'Uda dari desa meriak.' },
+        ];
+
+        // ================================================================
+        // 2. DATA BUDAYA SASAK
+        // ================================================================
+        const cultureData = [{
+            icon: '🏠',
+            title: 'Rumah Adat',
+            desc: 'Rumah adat Sasak berbentuk panggung dengan atap alang-alang.',
+            detail: 'Rumah adat Sasak disebut "Bale" yang memiliki filosofi dan nilai budaya yang mendalam.'
+        }, {
+            icon: '💃',
+            title: 'Tari Tradisional',
+            desc: 'Tari Gandrung dan Tari Peresean adalah tarian khas Sasak.',
+            detail: 'Tari Peresean melambangkan keberanian dan sportivitas masyarakat Sasak.'
+        }, {
+            icon: '🎵',
+            title: 'Musik Daerah',
+            desc: 'Gendang Beleq adalah alat musik tradisional Sasak.',
+            detail: 'Gendang Beleq digunakan dalam upacara adat dan penyambutan tamu.'
+        }, {
+            icon: '👕',
+            title: 'Pakaian Adat',
+            desc: 'Pakaian adat Sasak memiliki motif tenun yang khas.',
+            detail: 'Tenun ikat Lombok diakui sebagai warisan budaya tak benda.'
+        }, {
+            icon: '📖',
+            title: 'Cerita Rakyat',
+            desc: 'Legenda Putri Mandalika dan Bau Nyale.',
+            detail: 'Cerita rakyat Sasak kaya akan nilai moral dan kearifan lokal.'
+        }, {
+            icon: '🍲',
+            title: 'Kuliner Khas',
+            desc: 'Plecing Kangkung, Ayam Taliwang, dan Sate Bulayak.',
+            detail: 'Kuliner Sasak terkenal dengan cita rasa pedas dan rempah yang kuat.'
+        }];
+
+        // ================================================================
+        // 3. STATE
+        // ================================================================
+        let currentUser = null;
+        let isLoggedIn = false;
+        let selectedDialect = 'ngeno-ngene';
+        let isSourceRecording = false;
+        let sourceRecognition = null;
+
+        // Untuk speech-to-text
+        let finalTranscript = '';
+        let interimTranscript = '';
+
+        // ================================================================
+        // 4. INISIALISASI
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render kamus
+            renderDictionary(sasakDictionary);
+
+            // Render budaya
+            renderCulture();
+
+            // Event listener untuk tab
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                    const target = document.getElementById(this.dataset.tab);
+                    if (target) target.classList.add('active');
+                });
+            });
+
+            // Event listener untuk dialek
+            document.querySelectorAll('.dialect-option').forEach(el => {
+                el.addEventListener('click', function() {
+                    document.querySelectorAll('.dialect-option').forEach(d => d.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedDialect = this.dataset.dialect;
+                    console.log('Dialek terpilih:', selectedDialect);
+
+                    // Update terjemahan
+                    const sourceText = document.getElementById('sourceTextResult').textContent;
+                    if (sourceText && !sourceText.includes('Hasil suara')) {
+                        performTranslation(sourceText);
+                    }
+                });
+            });
+
+            // Event listener untuk ganti bahasa sumber
+            document.getElementById('sourceLangSelect').addEventListener('change', function() {
+                const label = document.getElementById('sourceLangLabel');
+                const langMap = {
+                    'en': '🇬🇧 English',
+                    'id': '🇮🇩 Indonesia',
+                    'ar': '🇸🇦 العربية',
+                    'zh': '🇨🇳 中文',
+                    'ja': '🇯🇵 日本語'
+                };
+                label.textContent = langMap[this.value] || '🌐 Unknown';
+            });
+
+            // Cek login state
+            checkAuthState();
+
+            // Load voices untuk TTS
+            if (window.speechSynthesis) {
+                window.speechSynthesis.getVoices();
+                window.speechSynthesis.onvoiceschanged = function() {
+                    window.speechSynthesis.getVoices();
+                };
+            }
+
+            console.log('✅ SasakTalk Voice Web siap digunakan!');
+        });
+
+        // ================================================================
+        // 5. AUTHENTICATION
+        // ================================================================
+        function checkAuthState() {
+            const saved = localStorage.getItem('sasaktalk_user');
+            if (saved) {
+                try {
+                    const user = JSON.parse(saved);
+                    currentUser = user;
+                    isLoggedIn = true;
+                    document.getElementById('userNameDisplay').textContent = user.name || 'User';
+                    document.getElementById('authBtnText').textContent = 'Logout';
+                    document.getElementById('authToggleBtn').innerHTML =
+                        '<i class="bi bi-box-arrow-right"></i> <span id="authBtnText">Logout</span>';
+                    document.getElementById('authToggleBtn').onclick = handleLogout;
+                } catch (e) {
+                    console.warn('Invalid user data');
+                }
+            }
+        }
+
+        function toggleAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.toggle('show');
+            // Reset ke login
+            switchAuthForm('login');
+        }
+
+        function switchAuthForm(form) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const title = document.getElementById('authModalTitle');
+
+            if (form === 'login') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                title.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i> Login';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                title.innerHTML = '<i class="bi bi-person-plus me-2"></i> Daftar Akun';
+            }
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!email || !password) {
+                alert('Mohon isi email dan password.');
+                return;
+            }
+
+            // Simulasi login (dengan localStorage)
+            const users = JSON.parse(localStorage.getItem('sasaktalk_users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                localStorage.setItem('sasaktalk_user', JSON.stringify(user));
+                isLoggedIn = true;
+                currentUser = user;
+                document.getElementById('userNameDisplay').textContent = user.name;
+                document.getElementById('authBtnText').textContent = 'Logout';
+                document.getElementById('authToggleBtn').innerHTML =
+                    '<i class="bi bi-box-arrow-right"></i> <span id="authBtnText">Logout</span>';
+                document.getElementById('authToggleBtn').onclick = handleLogout;
+                toggleAuthModal();
+                alert('Login berhasil! Selamat datang, ' + user.name + '!');
+            } else {
+                alert('Email atau password salah. Silakan coba lagi.');
+            }
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+
+            if (!name || !email || !password) {
+                alert('Mohon isi semua data.');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Password minimal 6 karakter.');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('sasaktalk_users') || '[]');
+
+            if (users.find(u => u.email === email)) {
+                alert('Email sudah terdaftar. Silakan login.');
+                return;
+            }
+
+            const newUser = { name, email, password, createdAt: new Date().toISOString() };
+            users.push(newUser);
+            localStorage.setItem('sasaktalk_users', JSON.stringify(users));
+
+            alert('Pendaftaran berhasil! Silakan login.');
+            switchAuthForm('login');
+            document.getElementById('loginEmail').value = email;
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('sasaktalk_user');
+            isLoggedIn = false;
+            currentUser = null;
+            document.getElementById('userNameDisplay').textContent = 'Tamu';
+            document.getElementById('authBtnText').textContent = 'Login';
+            document.getElementById('authToggleBtn').innerHTML =
+                '<i class="bi bi-box-arrow-in-right"></i> <span id="authBtnText">Login</span>';
+            document.getElementById('authToggleBtn').onclick = toggleAuthModal;
+            alert('Anda telah logout.');
+        }
+
+        // ================================================================
+        // 6. VOICE RECOGNITION (Source)
+        // ================================================================
+        function initSourceRecognition() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) {
+                alert('Browser tidak mendukung Speech Recognition. Gunakan Chrome/Edge terbaru.');
+                return null;
+            }
+
+            const rec = new SR();
+            rec.continuous = false;
+            rec.interimResults = true;
+            rec.maxAlternatives = 1;
+
+            const langMap = {
+                'en': 'en-US',
+                'id': 'id-ID',
+                'ar': 'ar-SA',
+                'zh': 'zh-CN',
+                'ja': 'ja-JP'
+            };
+            const sourceLang = document.getElementById('sourceLangSelect').value;
+            rec.lang = langMap[sourceLang] || 'id-ID';
+
+            return rec;
+        }
+
+        function toggleSourceRecording() {
+            const btn = document.getElementById('sourceVoiceBtn');
+            const status = document.getElementById('sourceVoiceStatus');
+            const area = document.getElementById('sourceVoiceArea');
+
+            if (isSourceRecording) {
+                // Stop
+                if (sourceRecognition) {
+                    try { sourceRecognition.stop(); } catch (e) {}
+                }
+                isSourceRecording = false;
+                btn.classList.remove('recording');
+                area.classList.remove('recording');
+                status.textContent = '⏹️ Rekam dihentikan';
+                status.className = 'voice-status';
+                return;
+            }
+
+            // Start
+            sourceRecognition = initSourceRecognition();
+            if (!sourceRecognition) return;
+
+            const langMap = {
+                'en': 'en-US',
+                'id': 'id-ID',
+                'ar': 'ar-SA',
+                'zh': 'zh-CN',
+                'ja': 'ja-JP'
+            };
+            const sourceLang = document.getElementById('sourceLangSelect').value;
+            sourceRecognition.lang = langMap[sourceLang] || 'id-ID';
+
+            sourceRecognition.onstart = function() {
+                isSourceRecording = true;
+                btn.classList.add('recording');
+                area.classList.add('recording');
+                status.textContent = '🎤 Mendengarkan... (bicara sekarang)';
+                status.className = 'voice-status active';
+                document.getElementById('sourceTextResult').textContent = '';
+            };
+
+            sourceRecognition.onerror = function(event) {
+                console.error('Speech error:', event.error);
+                stopSourceRecording();
+                if (event.error === 'not-allowed') {
+                    alert('Akses mikrofon ditolak. Izinkan di pengaturan browser.');
+                }
+                status.textContent = '❌ Error: ' + event.error;
+                status.className = 'voice-status';
+            };
+
+            sourceRecognition.onend = function() {
+                // Jika ada hasil final, lakukan terjemahan
+                const text = document.getElementById('sourceTextResult').textContent;
+                if (text && !text.includes('Hasil suara')) {
+                    performTranslation(text);
+                }
+                stopSourceRecording();
+            };
+
+            sourceRecognition.onresult = function(event) {
+                let final = '';
+                let interim = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        final += transcript;
+                    } else {
+                        interim += transcript;
+                    }
+                }
+
+                if (final) {
+                    document.getElementById('sourceTextResult').textContent = final;
+                    // Terjemahkan otomatis
+                    performTranslation(final);
+                } else if (interim) {
+                    document.getElementById('sourceTextResult').textContent = interim + ' ...';
+                }
+            };
+
+            try {
+                sourceRecognition.start();
+            } catch (e) {
+                console.log('Recognition already started');
+            }
+        }
+
+        function stopSourceRecording() {
+            isSourceRecording = false;
+            const btn = document.getElementById('sourceVoiceBtn');
+            const status = document.getElementById('sourceVoiceStatus');
+            const area = document.getElementById('sourceVoiceArea');
+
+            btn.classList.remove('recording');
+            area.classList.remove('recording');
+
+            if (status.textContent.includes('Mendengarkan')) {
+                status.textContent = '✅ Selesai merekam';
+                status.className = 'voice-status';
+            } else {
+                status.textContent = 'Tekan mikrofon untuk mulai bicara';
+                status.className = 'voice-status';
+            }
+
+            if (sourceRecognition) {
+                try { sourceRecognition.stop(); } catch (e) {}
+                sourceRecognition = null;
+            }
+        }
+
+        // ================================================================
+        // 7. TRANSLATION ENGINE
+        // ================================================================
+        // Kamus sederhana untuk terjemahan cepat
+        const simpleDict = {
+            'hello': 'halo',
+            'good morning': 'selamat pagi',
+            'good afternoon': 'selamat siang',
+            'good evening': 'selamat sore',
+            'good night': 'selamat malam',
+            'thank you': 'terima kasih',
+            'thanks': 'terima kasih',
+            'sorry': 'maaf',
+            'please': 'tolong',
+            'yes': 'ya',
+            'no': 'tidak',
+            'how are you': 'apa kabar',
+            'i am fine': 'saya baik',
+            'what is your name': 'siapa nama kamu',
+            'my name is': 'nama saya',
+            'where are you from': 'dari mana kamu',
+            'i am from': 'saya dari',
+            'beautiful': 'cantik',
+            'good': 'bagus',
+            'bad': 'buruk',
+            'big': 'besar',
+            'small': 'kecil',
+            'water': 'air',
+            'food': 'makanan',
+            'rice': 'nasi',
+            'delicious': 'enak',
+            'expensive': 'mahal',
+            'cheap': 'murah',
+            'ticket': 'tiket',
+            'hotel': 'hotel',
+            'beach': 'pantai',
+            'mountain': 'gunung',
+        };
+
+        function performTranslation(text) {
+            const resultEl = document.getElementById('finalTranslation');
+            const sourceEl = document.getElementById('translationSource');
+            const targetResult = document.getElementById('targetTextResult');
+
+            if (!text || text.trim() === '' || text.includes('Hasil suara')) {
+                resultEl.textContent = 'Belum ada teks untuk diterjemahkan...';
+                resultEl.className = 'result-text placeholder';
+                sourceEl.textContent = 'Masukkan teks atau gunakan suara';
+                return;
+            }
+
+            const sourceLang = document.getElementById('sourceLangSelect').value;
+
+            // Step 1: Terjemahkan ke Indonesia dulu jika bukan Indonesia
+            let indonesianText = text;
+            if (sourceLang !== 'id') {
+                // Coba gunakan dictionary sederhana
+                const words = text.toLowerCase().split(/\s+/);
+                const translated = words.map(w => {
+                    const clean = w.replace(/[^a-zA-Z]/g, '');
+                    return simpleDict[clean] || clean;
+                });
+                indonesianText = translated.join(' ');
+            }
+
+            // Step 2: Dari Indonesia ke Sasak (dengan dialek)
+            const dictResult = translateToSasak(indonesianText);
+
+            // Update UI
+            resultEl.textContent = dictResult.translation;
+            resultEl.className = 'result-text';
+            sourceEl.textContent = `Sumber: ${sourceLang.toUpperCase()} → Sasak (${selectedDialect}) · ${dictResult.coverage}% kosakata dikenal`;
+
+            // Update target text result
+            targetResult.textContent = dictResult.translation;
+
+            // Simpan untuk TTS
+            window.lastTranslation = dictResult.translation;
+        }
+
+        function translateToSasak(text) {
+            const words = text.toLowerCase().split(/\s+/);
+            const translated = [];
+            let found = 0;
+
+            for (let word of words) {
+                const clean = word.replace(/[^a-zA-Z]/g, '');
+                // Cari di kamus berdasarkan dialek
+                let match = sasakDictionary.find(item =>
+                    item.word.toLowerCase() === clean &&
+                    item.dialect === selectedDialect
+                );
+
+                // Jika tidak ada di dialek tertentu, cari yang umum (ngeno-ngene)
+                if (!match) {
+                    match = sasakDictionary.find(item =>
+                        item.word.toLowerCase() === clean &&
+                        item.dialect === 'ngeno-ngene'
+                    );
+                }
+
+                if (match) {
+                    translated.push(match.translation);
+                    found++;
+                } else {
+                    translated.push(clean);
+                }
+            }
+
+            const total = words.length;
+            const coverage = Math.round((found / total) * 100);
+
+            return {
+                translation: translated.join(' '),
+                coverage: coverage
+            };
+        }
+
+        // ================================================================
+        // 8. TEXT-TO-SPEECH (Target)
+        // ================================================================
+        function playTargetAudio() {
+            const text = document.getElementById('finalTranslation').textContent;
+            if (!text || text === 'Belum ada terjemahan...' || text.includes('Belum ada teks')) {
+                alert('Tidak ada teks untuk disuarakan.');
+                return;
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+
+            const voices = window.speechSynthesis.getVoices();
+            const indoVoice = voices.find(v => v.lang.includes('id'));
+            if (indoVoice) utterance.voice = indoVoice;
+
+            window.speechSynthesis.speak(utterance);
+
+            document.getElementById('targetVoiceStatus').textContent = '🔊 Memutar suara...';
+            setTimeout(() => {
+                document.getElementById('targetVoiceStatus').textContent = 'Hasil terjemahan akan disuarakan';
+            }, 2000);
+        }
+
+        // ================================================================
+        // 9. MANUAL TRANSLATE
+        // ================================================================
+        function manualTranslate() {
+            const text = document.getElementById('sourceTextResult').textContent;
+            if (!text || text.includes('Hasil suara')) {
+                // Gunakan input dari text area jika ada (opsional)
+                const inputText = prompt('Masukkan teks untuk diterjemahkan:');
+                if (inputText) {
+                    document.getElementById('sourceTextResult').textContent = inputText;
+                    performTranslation(inputText);
+                }
+                return;
+            }
+            performTranslation(text);
+        }
+
+        // ================================================================
+        // 10. CLEAR
+        // ================================================================
+        function clearAll() {
+            document.getElementById('sourceTextResult').textContent = '';
+            document.getElementById('targetTextResult').textContent = '';
+            document.getElementById('finalTranslation').textContent = 'Belum ada terjemahan...';
+            document.getElementById('finalTranslation').className = 'result-text placeholder';
+            document.getElementById('translationSource').textContent = 'Siap menerjemahkan';
+            document.getElementById('sourceVoiceStatus').textContent = 'Tekan mikrofon untuk mulai bicara';
+            document.getElementById('targetVoiceStatus').textContent = 'Hasil terjemahan akan disuarakan';
+            stopSourceRecording();
+            window.lastTranslation = '';
+        }
+
+        // ================================================================
+        // 11. DICTIONARY RENDER
+        // ================================================================
+        function renderDictionary(data) {
+            const grid = document.getElementById('dictionaryGrid');
+            grid.innerHTML = '';
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'dictionary-item';
+                div.innerHTML = `
+                    <div class="dict-word">${item.word}</div>
+                    <div class="dict-translation">→ ${item.translation}</div>
+                    <div class="dict-example">📌 ${item.example || 'Contoh: ' + item.word + ' dalam kalimat.'}</div>
+                    <div style="font-size:0.65rem;color:#adb5bd;margin-top:4px;">Dialek: ${item.dialect}</div>
+                `;
+                grid.appendChild(div);
+            });
+            document.getElementById('dictCount').textContent = data.length;
+        }
+
+        function filterDictionary() {
+            const query = document.getElementById('dictSearchInput').value.toLowerCase().trim();
+            if (!query) {
+                renderDictionary(sasakDictionary);
+                return;
+            }
+
+            const filtered = sasakDictionary.filter(item =>
+                item.word.toLowerCase().includes(query) ||
+                item.translation.toLowerCase().includes(query) ||
+                item.dialect.toLowerCase().includes(query)
+            );
+            renderDictionary(filtered);
+        }
+
+        // ================================================================
+        // 12. CULTURE RENDER
+        // ================================================================
+        function renderCulture() {
+            const grid = document.getElementById('cultureGrid');
+            grid.innerHTML = '';
+            cultureData.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'culture-card';
+                div.innerHTML = `
+                    <div class="icon-box">${item.icon}</div>
+                    <div class="info">
+                        <h6>${item.title}</h6>
+                        <p>${item.desc}</p>
+                    </div>
+                `;
+                div.addEventListener('click', function() {
+                    alert(`📖 ${item.title}\n\n${item.detail}`);
+                });
+                grid.appendChild(div);
+            });
+        }
+
+        // ================================================================
+        // 13. HANLDE SPEECH RECOGNITION CHANGE BAHASA
+        // ================================================================
+        document.getElementById('sourceLangSelect').addEventListener('change', function() {
+            if (isSourceRecording) {
+                // Restart recognition with new language
+                stopSourceRecording();
+                setTimeout(() => {
+                    toggleSourceRecording();
+                }, 300);
+            }
+        });
+
+        // ================================================================
+        // 14. HANDLE KEYBOARD SHORTCUTS
+        // ================================================================
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Enter untuk translate
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                manualTranslate();
+            }
+            // Escape untuk tutup modal
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('authModal');
+                if (modal.classList.contains('show')) {
+                    toggleAuthModal();
+                }
+            }
+            // Spasi untuk voice (jika fokus di halaman)
+            if (e.key === ' ' && !e.target.matches('input, textarea, button')) {
+                e.preventDefault();
+                toggleSourceRecording();
+            }
+        });
+
+        // ================================================================
+        // 15. CLEANUP
+        // ================================================================
+        window.addEventListener('beforeunload', function() {
+            if (sourceRecognition) {
+                try { sourceRecognition.abort(); } catch (e) {}
+            }
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+        });
+
+        console.log('🚀 SasakTalk Voice Web loaded successfully!');
+        console.log(`📚 ${sasakDictionary.length} kosakata di kamus`);
+        console.log(`🎭 ${cultureData.length} item budaya`);
+        console.log('💡 Tips: Tekan Spasi untuk voice, Ctrl+Enter untuk translate');
+    </script>
+
+</body>
+</html>
